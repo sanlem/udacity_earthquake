@@ -43,7 +43,7 @@ public class EarthquakeReportAdapter extends ArrayAdapter<EarthquakeReport> {
         // find the timestamp view
         TextView timestampView = (TextView) listItemView.findViewById(R.id.timestamp);
         // set the timestamp
-        timestampView.setText(currentReport.getTimestamp());
+        timestampView.setText(String.valueOf(currentReport.getTimestamp()));
 
         // return the layout
         return listItemView;
