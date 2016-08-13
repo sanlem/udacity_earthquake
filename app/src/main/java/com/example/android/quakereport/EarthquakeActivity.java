@@ -15,9 +15,12 @@
  */
 package com.example.android.quakereport;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ArrayAdapter;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -32,16 +35,17 @@ public class EarthquakeActivity extends AppCompatActivity {
         setContentView(R.layout.earthquake_activity);
 
         // Create a fake list of earthquake locations.
-        final ArrayList<EarthquakeReport> earthquakes = new ArrayList<>();
-        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
-        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
-        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
-        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
-        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
-        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
-        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
-        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
-        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
+//        final ArrayList<EarthquakeReport> earthquakes = new ArrayList<>();
+//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
+//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
+//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
+//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
+//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
+//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
+//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
+//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
+//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
+        final ArrayList<EarthquakeReport> earthquakes = QueryUtils.extractEarthquakeReports();
 
         // Find a reference to the {@link ListView} in the layout
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
@@ -52,5 +56,21 @@ public class EarthquakeActivity extends AppCompatActivity {
         // Set the adapter on the {@link ListView}
         // so the list can be populated in the user interface
         earthquakeListView.setAdapter(itemsAdapter);
+
+        earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                EarthquakeReport current = earthquakes.get(position);
+                Uri webpage = Uri.parse(current.getUrl());
+                Intent webIntent = new Intent(Intent.ACTION_VIEW, webpage);
+                // Create intent to show chooser
+                Intent chooser = Intent.createChooser(webIntent, "Open in");
+
+                // Verify the intent will resolve to at least one activity
+                if (webIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(chooser);
+                }
+            }
+        });
     }
 }

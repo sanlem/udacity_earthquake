@@ -6,12 +6,14 @@ package com.example.android.quakereport;
 public class EarthquakeReport {
     private String mLocation;
     private double mMagnitude;
-    private int mTimestamp;
+    private long mTimestamp;
+    private String mUrl;
 
-    public EarthquakeReport(String location, double magnitude, int timestamp) {
+    public EarthquakeReport(String location, double magnitude, long timestamp, String url) {
         mLocation = location;
         mMagnitude = magnitude;
         mTimestamp = timestamp;
+        mUrl = url;
     }
 
     public String getLocation() {
@@ -22,7 +24,9 @@ public class EarthquakeReport {
         return mMagnitude;
     }
 
-    public int getTimestamp() {
+    public long getTimestamp() {
         return mTimestamp;
     }
+
+    public String getUrl() { return mUrl; }
 }

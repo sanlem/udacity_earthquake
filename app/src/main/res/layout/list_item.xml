@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_item_height"
@@ -7,31 +7,52 @@
 
     <TextView
         android:id="@+id/magnitude"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:paddingLeft="16dp"
-        android:textAppearance="?android:textAppearanceLarge"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginLeft="16dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/magnitude_circle"
+        android:fontFamily="sans-serif-medium"
         android:gravity="center"
-        tools:text="4.1"/>
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        tools:text="8.9" />
 
-    <TextView
-        android:id="@+id/location"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@id/magnitude"
-        android:paddingLeft="32dp"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:gravity="center"
-        tools:text="New York"/>
+        android:layout_weight="2"
+        android:paddingLeft="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/location_offset"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textAllCaps="true"
+            android:gravity="bottom"
+            android:textAppearance="?android:textAppearanceSmall"
+            tools:text="42km N of" />
+
+        <TextView
+            android:id="@+id/location_primary"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="top"
+            android:textColor="@android:color/black"
+            android:textAppearance="?android:textAppearanceMedium"
+            tools:text="New York" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/timestamp"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:paddingRight="32dp"
-        android:textAppearance="?android:textAppearanceMedium"
+        android:layout_weight="1"
         android:gravity="center"
-        tools:text="12312"/>
-</RelativeLayout>
+        android:paddingRight="16dp"
+        android:textAppearance="?android:textAppearanceMedium"
+        tools:text="12312" />
+</LinearLayout>
