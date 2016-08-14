@@ -17,6 +17,7 @@ package com.example.android.quakereport;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -28,25 +29,21 @@ import java.util.ArrayList;
 public class EarthquakeActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
+    public static final String USGS_REQUEST_URL = "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
-        // Create a fake list of earthquake locations.
-//        final ArrayList<EarthquakeReport> earthquakes = new ArrayList<>();
-//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
-//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
-//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
-//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
-//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
-//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
-//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
-//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
-//        earthquakes.add(new EarthquakeReport("San Francisco", 4.2, 12345));
-        final ArrayList<EarthquakeReport> earthquakes = QueryUtils.extractEarthquakeReports();
+        // Fetch a list of earthquake locations.
+        EarthquakeAsyncTask task = new EarthquakeAsyncTask();
+        task.execute(USGS_REQUEST_URL);
+        // final ArrayList<EarthquakeReport> earthquakes = QueryUtils.extractEarthquakeReports();
+    }
 
+    private void updateUi(ArrayList<EarthquakeReport> fetchedItems) {
+        final ArrayList<EarthquakeReport> earthquakes = fetchedItems;
         // Find a reference to the {@link ListView} in the layout
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
 
@@ -72,5 +69,30 @@ public class EarthquakeActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * Background task for fetching the data from USGS
+     * and updating UI
+     */
+    private class EarthquakeAsyncTask extends AsyncTask<String, Void, ArrayList<EarthquakeReport>> {
+        @Override
+        protected ArrayList<EarthquakeReport> doInBackground(String... urls) {
+            // check if the input values exist
+            if (urls.length < 0 || urls[0] == null) {
+                return null;
+            }
+            ArrayList<EarthquakeReport> result = QueryUtils.fetchEarthquakeData(urls[0]);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<EarthquakeReport> result) {
+            // If there is no result, do nothing.
+            if (result == null) {
+                return;
+            }
+            updateUi(result);
+        }
     }
 }
